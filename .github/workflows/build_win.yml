@@ -31,7 +31,7 @@ jobs:
 
       - run: yarn install && yarn add @quasar/cli
       - run: ./node_modules/@quasar/app/bin/quasar build -m electron -P always
-      - run: ls ./dist/electron/DB Migrate-win32-x64
+      - run: ls "./dist/electron/DB Migrate-win32-x64"
 
       - name: Release
         uses: softprops/action-gh-release@v1
