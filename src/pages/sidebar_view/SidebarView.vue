@@ -25,6 +25,16 @@
             />
 
             <SidebarCollopseGroup
+              label="Subscriptions"
+              icon="bi-disc"
+              :showCount="showSidebarCount"
+              :categorizers="subscriptions"
+              categorizerType="subscription"
+              :selectedCategorizer="selectedCategorizer"
+              @select-categorizer="onSelectCategorizer"
+            />
+
+            <SidebarCollopseGroup
               label="Tags"
               icon="bi-tag"
               :showCount="showSidebarCount"
@@ -71,6 +81,7 @@ export default defineComponent({
   props: {
     tags: Array,
     folders: Array,
+    subscriptions: Array,
     selectedCategorizer: String,
     showSidebarCount: Boolean,
   },

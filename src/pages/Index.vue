@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <!-- Sidebar -->
-    <SidebarView :selectedCategorizer="selectedCategorizer" :tags="tags" :folders="folders" :showSidebarCount="showSidebarCount"/>
+    <SidebarView :selectedCategorizer="selectedCategorizer" :tags="tags" :folders="folders" :subscriptions="subscriptions" :showSidebarCount="showSidebarCount"/>
     <div ref="mainview" class="mainview absolute-full bg-bgprimary">
       <!-- Menu Bar -->
       <ToolbarView :selectedEntities="selectedEntities" :sortBy="sortBy" :sortOrder="sortOrder"/>
@@ -17,7 +17,7 @@
       <!-- Edit Window -->
       <EditView />
       <!-- Categorizer Add Window -->
-      <CategorizerEditView :tags="tags" :folders="folders"/>
+      <CategorizerEditView :tags="tags" :folders="folders" />
       <!-- Note Add Window -->
       <NoteEditView />
 
@@ -45,7 +45,7 @@ import { PaperCategorizer } from 'src/models/PaperCategorizer';
 import { PaperEntity, PaperEntityPlaceholder } from 'src/models/PaperEntity';
 import { PreferenceType } from 'src/utils/preference';
 
-
+import { ObjectId } from 'bson'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -61,6 +61,7 @@ export default defineComponent({
     const entities: Ref<PaperEntity[]> = ref([]);
     const tags: Ref<PaperCategorizer[]> = ref([]);
     const folders: Ref<PaperCategorizer[]> = ref([]);
+    const subscriptions: Ref<PaperCategorizer[]> = ref([]);
 
     const searchText = ref('');
     const selectedCategorizer = ref('lib-all');
@@ -234,6 +235,7 @@ export default defineComponent({
       entities,
       tags,
       folders,
+      subscriptions,
 
       searchText,
       selectedCategorizer,
