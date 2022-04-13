@@ -7,51 +7,50 @@
                 <span>Library</span>
             </q-item>
 
-            <SidebarItem
+            <CategorizerItem
               label="All Papers"
               icon="bi-collection"
               :count="entitiesCount"
               :showCount="showSidebarCount"
               :withSpinner="true"
-              :active="selectedCategorizer === 'lib-all'"
-              @click="onSelectCategorizer('lib-all')"
+              :active="selectedSideItem === 'lib-all'"
+              @click="onSelectedSideItem('lib-all')"
             />
-            <SidebarItem
+            <CategorizerItem
               label="Flags"
               icon="bi-flag"
               :withSpinner="false"
-              :active="selectedCategorizer === 'lib-flaged'"
-              @click="onSelectCategorizer('lib-flaged')"
+              :active="selectedSideItem === 'lib-flaged'"
+              @click="onSelectedSideItem('lib-flaged')"
             />
 
-            <SidebarCollopseGroup
+            <FeedCollopseGroup
               label="Subscriptions"
               icon="bi-disc"
               :showCount="showSidebarCount"
-              :categorizers="subscriptions"
-              categorizerType="subscription"
-              :selectedCategorizer="selectedCategorizer"
-              @select-categorizer="onSelectCategorizer"
+              :feeds="feeds"
+              :selectedSideItem="selectedSideItem"
+              @select-side-item="onSelectedSideItem"
             />
 
-            <SidebarCollopseGroup
+            <CategorizerCollopseGroup
               label="Tags"
               icon="bi-tag"
               :showCount="showSidebarCount"
               :categorizers="tags"
               categorizerType="tag"
-              :selectedCategorizer="selectedCategorizer"
-              @select-categorizer="onSelectCategorizer"
+              :selectedSideItem="selectedSideItem"
+              @select-side-item="onSelectedSideItem"
             />
 
-            <SidebarCollopseGroup
+            <CategorizerCollopseGroup
               label="Folders"
               icon="bi-folder"
               :showCount="showSidebarCount"
               :categorizers="folders"
               categorizerType="folder"
-              :selectedCategorizer="selectedCategorizer"
-              @select-categorizer="onSelectCategorizer"
+              :selectedSideItem="selectedSideItem"
+              @select-side-item="onSelectedSideItem"
             />
 
         </q-list>
@@ -66,23 +65,25 @@
 <script lang="ts">
 import {defineComponent, toRefs, ref} from 'vue';
 import WindowControl from './components/WindowControl.vue';
-import SidebarItem from './components/SidebarItem.vue';
-import SidebarCollopseGroup from './components/SidebarCollopseGroup.vue';
+import CategorizerItem from './components/CategorizerItem.vue';
+import CategorizerCollopseGroup from './components/CategorizerCollopseGroup.vue';
+import FeedCollopseGroup from './components/FeedCollopseGroup.vue';
 
 export default defineComponent({
   name: 'SidebarView',
 
   components: {
     WindowControl,
-    SidebarItem,
-    SidebarCollopseGroup,
+    CategorizerItem,
+    CategorizerCollopseGroup,
+    FeedCollopseGroup,
   },
 
   props: {
     tags: Array,
     folders: Array,
-    subscriptions: Array,
-    selectedCategorizer: String,
+    feeds: Array,
+    selectedSideItem: String,
     showSidebarCount: Boolean,
   },
 
@@ -94,8 +95,8 @@ export default defineComponent({
       backgroundColor.value = 'var(--q-bg-secondary)'
     }
 
-    const onSelectCategorizer = (categorizer: string) => {
-      window.systemInteractor.setState('selectionState.selectedCategorizer', JSON.stringify(categorizer));
+    const onSelectedSideItem = (sideItem: string) => {
+      window.systemInteractor.setState('selectionState.selectedSideItem', JSON.stringify(sideItem));
     };
 
     window.systemInteractor.registerState('viewState.entitiesCount', (event, message) => {
@@ -105,7 +106,7 @@ export default defineComponent({
     return {
       entitiesCount,
       backgroundColor,
-      onSelectCategorizer,
+      onSelectedSideItem,
       ...toRefs(props),
     };
   },

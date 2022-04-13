@@ -3,6 +3,7 @@ import path from 'path';
 
 import { PaperEntityCacheSchema } from '../../models/PaperEntityCache';
 import { CacheRepository } from './cache-repository';
+import { FeedSubscriptionSchema } from '../../models/FeedSubscription';
 
 export function initCache(this: CacheRepository, reinit = false) {
   if (this._realm || reinit) {
@@ -27,7 +28,7 @@ export function initCache(this: CacheRepository, reinit = false) {
 
 export function getConfig(this: CacheRepository): Realm.Configuration {
   const config = {
-    schema: [PaperEntityCacheSchema],
+    schema: [PaperEntityCacheSchema, FeedSubscriptionSchema],
     schemaVersion: this._schemaVersion,
     path: path.join(
       this.sharedState.dbState.defaultPath.value as string,

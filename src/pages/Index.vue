@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <!-- Sidebar -->
-    <SidebarView :selectedCategorizer="selectedCategorizer" :tags="tags" :folders="folders" :subscriptions="subscriptions" :showSidebarCount="showSidebarCount"/>
+    <SidebarView :selectedSideItem="selectedSideItem" :tags="tags" :folders="folders" :feeds="feeds" :showSidebarCount="showSidebarCount"/>
     <div ref="mainview" class="mainview absolute-full bg-bgprimary">
       <!-- Menu Bar -->
       <ToolbarView :selectedEntities="selectedEntities" :sortBy="sortBy" :sortOrder="sortOrder"/>
@@ -21,6 +21,9 @@
       <!-- Note Add Window -->
       <NoteEditView />
 
+      <!-- Feed Edit Window -->
+      <FeedEditView />
+
       <!-- Preference Window -->
       <PreferenceView :preference="preference" />
 
@@ -37,6 +40,7 @@ import ToolbarView from './toolbar_view/ToolbarView.vue';
 import EntitiesView from './entities_view/EntitiesView.vue';
 import DetailView from './detail_view/DetailView.vue';
 import EditView from './edit_view/EditView.vue';
+import FeedEditView from './edit_view/FeedEditView.vue';
 import CategorizerEditView from './edit_view/CategorizerEditView.vue';
 import NoteEditView from './edit_view/NoteEditView.vue';
 import PreferenceView from './preference_view/PreferenceView.vue';
@@ -49,7 +53,7 @@ import { ObjectId } from 'bson'
 
 export default defineComponent({
   name: 'PageIndex',
-  components: { SidebarView, ToolbarView, EntitiesView, DetailView, EditView, CategorizerEditView, NoteEditView, PreferenceView },
+  components: { SidebarView, ToolbarView, EntitiesView, DetailView, EditView, CategorizerEditView, NoteEditView, FeedEditView, PreferenceView },
   setup() {
     const version = ref('-1');
     const $q = useQuasar();
@@ -61,10 +65,10 @@ export default defineComponent({
     const entities: Ref<PaperEntity[]> = ref([]);
     const tags: Ref<PaperCategorizer[]> = ref([]);
     const folders: Ref<PaperCategorizer[]> = ref([]);
-    const subscriptions: Ref<PaperCategorizer[]> = ref([]);
+    const feeds: Ref<PaperCategorizer[]> = ref([]);
 
     const searchText = ref('');
-    const selectedCategorizer = ref('lib-all');
+    const selectedSideItem = ref('lib-all');
     const selectedIndex: Ref<number[]> = ref([]);
     const selectedEntities: Ref<PaperEntity[]> = ref([]);
 
@@ -77,11 +81,11 @@ export default defineComponent({
       let flaged = false;
       let tag = '';
       let folder = '';
-      if (selectedCategorizer.value.startsWith('tag-')) {
-        tag = selectedCategorizer.value.replace('tag-', '');
-      } else if (selectedCategorizer.value.startsWith('folder-')) {
-        folder = selectedCategorizer.value.replace('folder-', '');
-      } else if (selectedCategorizer.value === 'lib-flaged') {
+      if (selectedSideItem.value.startsWith('tag-')) {
+        tag = selectedSideItem.value.replace('tag-', '');
+      } else if (selectedSideItem.value.startsWith('folder-')) {
+        folder = selectedSideItem.value.replace('folder-', '');
+      } else if (selectedSideItem.value === 'lib-flaged') {
         flaged = true;
       }
 
@@ -129,8 +133,8 @@ export default defineComponent({
 
     // =======================================
     // Register state change
-    window.systemInteractor.registerState('selectionState.selectedCategorizer', (_event, message) => {
-      selectedCategorizer.value = JSON.parse(message as string) as string;
+    window.systemInteractor.registerState('selectionState.selectedSideItem', (_event, message) => {
+      selectedSideItem.value = JSON.parse(message as string) as string;
       clearSelected();
       void reloadEntities();
     });
@@ -243,10 +247,10 @@ export default defineComponent({
       entities,
       tags,
       folders,
-      subscriptions,
+      feeds,
 
       searchText,
-      selectedCategorizer,
+      selectedSideItem,
       selectedEntities,
 
       preference,

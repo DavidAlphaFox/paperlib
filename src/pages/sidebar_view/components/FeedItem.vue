@@ -34,7 +34,7 @@
 import {defineComponent, ref, toRefs} from 'vue';
 
 export default defineComponent({
-  name: 'SidebarItem',
+  name: 'FeedItem',
   props: {
     label: String,
     icon: String,
@@ -42,6 +42,7 @@ export default defineComponent({
     withSpinner: Boolean,
     active: Boolean,
     showCount: Boolean,
+    url: String,
   },
   setup(props) {
     const isProgressViewShown = ref(false);

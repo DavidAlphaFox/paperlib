@@ -53,6 +53,7 @@ export class SharedState {
       isFolderViewShown: new State(false),
       isNoteViewShown: new State(false),
       isPreferenceViewShown: new State(false),
+      isFeedEditViewShown: new State(false),
 
       preferenceUpdated: new State(new Date().getTime()),
       themeUpdated: new State(new Date().getTime()),
@@ -68,12 +69,13 @@ export class SharedState {
     // Selection State
     this.selectionState = {
       selectedIndex: new State(''),
-      selectedCategorizer: new State(''),
+      selectedSideItem: new State(''),
     };
 
     // Shared Data
     this.sharedData = {
       editEntityDraft: new State(''),
+      editFeedDraft: new State(''),
     };
     // DB State
     this.dbState = {

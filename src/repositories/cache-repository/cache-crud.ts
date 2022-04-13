@@ -3,6 +3,10 @@ import { ObjectId } from 'bson';
 
 import { PaperEntity } from '../../models/PaperEntity';
 import { PaperEntityCache } from '../../models/PaperEntityCache';
+import {
+  FeedSubscription,
+  FeedSubscriptionDraft,
+} from '../../models/FeedSubscription';
 
 import { CacheRepository } from './cache-repository';
 
@@ -124,4 +128,62 @@ export function remove(this: CacheRepository, ids: string[]) {
   cache.write(() => {
     cache.delete(entitiesCache);
   });
+}
+
+// ============================================================
+// Feed Update & Add
+export async function updateFeed(
+  this: CacheRepository,
+  feeds: FeedSubscriptionDraft[]
+) {
+  const cache = this.cache();
+
+  const successes: boolean[] = [];
+
+  cache.write(() => {
+    for (const feed of feeds) {
+      let existingObj: FeedSubscription | null;
+      if (feed._id) {
+        existingObj = cache.objectForPrimaryKey(
+          'FeedSubscription',
+          new ObjectId(feed._id)
+        ) as FeedSubscription;
+      } else {
+        existingObj = null;
+      }
+      if (existingObj) {
+        // Update
+        const updateObj = existingObj as unknown as FeedSubscription;
+        updateObj.name = feed.name;
+        updateObj.url = feed.url;
+        updateObj.count = feed.count;
+
+        successes.push(true);
+      } else {
+        // Add
+        const reduplicatedFeeds = cache
+          .objects('FeedSubscription')
+          .filtered(`url == \"${feed.url}\"`);
+        if (reduplicatedFeeds.length > 0) {
+          continue;
+        }
+
+        const newObj = entity.create();
+        if (entity.tags) {
+          newObj.tags = this.linkCategorizers(entity.tags, realm, 'PaperTag');
+        }
+        if (entity.folders) {
+          newObj.folders = this.linkCategorizers(
+            entity.folders,
+            realm,
+            'PaperFolder'
+          );
+        }
+
+        realm.create('PaperEntity', newObj);
+        successes.push(true);
+      }
+    }
+  });
+  return successes;
 }

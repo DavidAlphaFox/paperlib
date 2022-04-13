@@ -14,6 +14,7 @@ import { FileRepository } from '../repositories/file-repository/file-repository'
 import { WebDavFileRepository } from '../repositories/file-repository/webdav-repository';
 import { ExporterRepository } from '../repositories/exporter-repository/exporter-repository';
 import { CacheRepository } from '../repositories/cache-repository/cache-repository';
+import { FeedSubscriptionDraft } from '../models/FeedSubscription';
 
 export class EntityInteractor {
   sharedState: SharedState;
@@ -344,7 +345,7 @@ export class EntityInteractor {
   // ============================================================
   async initDB() {
     this.sharedState.set('selectionState.selectedIndex', '[]');
-    this.sharedState.set('selectionState.selectedCategorizer', '');
+    this.sharedState.set('selectionState.selectedSideItem', '');
     await this.dbRepository.initRealm(true);
     this.sharedState.set('viewState.realmReinited', new Date().getTime());
   }
@@ -412,5 +413,24 @@ export class EntityInteractor {
       url: url,
       download: download,
     });
+  }
+
+  // ============================================================
+  // Feed
+  async updateFeed(feedsStr: string) {
+    let feedDrafts = JSON.parse(feedsStr) as FeedSubscriptionDraft[];
+    feedDrafts = feedDrafts.map((feedDraft) => {
+      const draft = new FeedSubscriptionDraft();
+      draft.initialize(feedDraft);
+      return draft;
+    });
+
+    const updatePromise = async (feedDrafts: FeedSubscriptionDraft[]) => {
+      await this.cacheRepository.updateFeeds(
+        feedDrafts as FeedSubscriptionDraft[]
+      );
+    };
+
+    await updatePromise(feedDrafts);
   }
 }

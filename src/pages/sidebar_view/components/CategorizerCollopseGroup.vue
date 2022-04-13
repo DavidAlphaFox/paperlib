@@ -22,8 +22,8 @@
         v-show="!isCollopsed"
         v-for="categorizer in categorizers"
         :key="categorizerType + '-' + categorizer.name"
-        :active="selectedCategorizer === categorizerType + '-' + categorizer.name"
-        @click="onSelectCategorizerInGroup(categorizerType + '-' + categorizer.name)"
+        :active="selectedSideItem === categorizerType + '-' + categorizer.name"
+        @click="onSelectSideItemInGroup(categorizerType + '-' + categorizer.name)"
     >
         <q-icon
             class="q-ml-sm q-mr-sm sidebar-list-icon"
@@ -57,16 +57,16 @@ import { PaperCategorizer } from 'src/models/PaperCategorizer';
 import {defineComponent, ref, toRefs} from 'vue';
 
 export default defineComponent({
-  name: 'SidebarCollopseGroup',
+  name: 'CategorizerCollopseGroup',
   props: {
     label: String,
     icon: String,
     categorizers: Array,
     categorizerType: String,
-    selectedCategorizer: String,
+    selectedSideItem: String,
     showCount: Boolean,
   },
-  emits: ['select-categorizer'],
+  emits: ['select-side-item'],
   setup(props, {emit}) {
     const isCollopsed = ref(false);
 
@@ -74,8 +74,8 @@ export default defineComponent({
       isCollopsed.value = !isCollopsed.value;
     };
 
-    const onSelectCategorizerInGroup = (categorizer: PaperCategorizer) => {
-      emit('select-categorizer', categorizer);
+    const onSelectSideItemInGroup = (categorizer: string) => {
+      emit('select-side-item', categorizer);
     };
 
     const deleteCategorizer = (categorizer: PaperCategorizer) => {
@@ -89,7 +89,7 @@ export default defineComponent({
     return {
       isCollopsed,
       onCollopse,
-      onSelectCategorizerInGroup,
+      onSelectSideItemInGroup,
       deleteCategorizer,
       ...toRefs(props),
     };
