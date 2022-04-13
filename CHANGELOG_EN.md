@@ -1,3 +1,20 @@
+## v1.5.8 Apr 12 2022
+
+1. Support custom MongoDB atlas App ID.
+
+## v1.5.7 Apr 11 2022
+
+1. Fix animations of the context menu.
+
+## v1.5.6 Apr 10 2022
+
+1. Remove useless animations.
+
+
+## v1.5.5 Apr 06 2022
+
+1. Fix a bug when automatically delete source PDF files.
+
 ## v1.5.4 Apr 05 2022
 
 1. Fix the routine re-scraping bug.

@@ -1,1 +1,1 @@
-1. Fix the routine re-scraping bug.
+1. Support custom MongoDB atlas App ID.
