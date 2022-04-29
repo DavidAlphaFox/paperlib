@@ -308,11 +308,6 @@ if (!gotTheLock) {
 
   app.on('open-url', (event, url) => {
     if (url.startsWith('paperlib://')) {
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus();
-        BrowserWindow.getFocusedWindow().webContents.send('pluginURL', url);
-      }
     }
   });
 }

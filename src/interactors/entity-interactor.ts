@@ -14,6 +14,7 @@ import { FileRepository } from '../repositories/file-repository/file-repository'
 import { WebDavFileRepository } from '../repositories/file-repository/webdav-repository';
 import { ExporterRepository } from '../repositories/exporter-repository/exporter-repository';
 import { CacheRepository } from '../repositories/cache-repository/cache-repository';
+import { WebParserRepository } from '../repositories/webparser-repository/webparser-repository';
 
 export class EntityInteractor {
   sharedState: SharedState;
@@ -24,6 +25,7 @@ export class EntityInteractor {
   fileRepository: FileRepository;
   exporterRepository: ExporterRepository;
   cacheRepository: CacheRepository;
+  webParserRepository: WebParserRepository;
 
   scheduler: ToadScheduler;
 
@@ -58,6 +60,10 @@ export class EntityInteractor {
       this.sharedState
     );
     this.cacheRepository = new CacheRepository(
+      this.preference,
+      this.sharedState
+    );
+    this.webParserRepository = new WebParserRepository(
       this.preference,
       this.sharedState
     );

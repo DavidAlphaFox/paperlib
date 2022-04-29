@@ -173,10 +173,6 @@ export default defineComponent({
       void reloadFolders();
     });
 
-    window.systemInteractor.registerSignal('pluginURL', (_event, message) => {
-      void window.entityInteractor.addFromPlugin([message as string]);
-    });
-
     window.systemInteractor.registerSignal('window-lost-focus', (_event, _message) => {
       void window.entityInteractor.pauseSync();
     });

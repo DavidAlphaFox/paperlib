@@ -3,10 +3,9 @@ import os from 'os';
 import stream from 'stream';
 import { promisify } from 'util';
 import got from 'got';
-
-import { PaperEntityDraft } from '../../models/PaperEntityDraft';
 import { promises as fsPromise, createWriteStream, existsSync } from 'fs';
 
+import { PaperEntityDraft } from '../../models/PaperEntityDraft';
 import { Preference } from '../../utils/preference';
 import { SharedState } from '../../interactors/app-state';
 import { constructFileURL } from '../../utils/path';
@@ -51,10 +50,13 @@ export class FileRepository {
     const _targetURL = targetURL.replace('file://', '');
 
     try {
-    await fsPromise.copyFile(_sourceURL, _targetURL);
-      if (this.preference.get('deleteSourceFile') as boolean && _sourceURL !== _targetURL) {
+      await fsPromise.copyFile(_sourceURL, _targetURL);
+      if (
+        (this.preference.get('deleteSourceFile') as boolean) &&
+        _sourceURL !== _targetURL
+      ) {
         await fsPromise.unlink(sourceURL);
-      } 
+      }
       return true;
     } catch (error) {
       this.sharedState.set(
